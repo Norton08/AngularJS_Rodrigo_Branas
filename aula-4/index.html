@@ -26,8 +26,9 @@
             }
         </style>
         <script src="/node_modules/angular/angular.js"></script>
+        <script src="/node_modules/angular/angular-messages.js"></script>
         <script>
-            angular.module("listaTelefonica", []);
+            angular.module("listaTelefonica", ["ngMessages"]);
             angular.module("listaTelefonica").controller("listaTelefonicaCtrl", 
                 function ($scope) {
                     $scope.app = "Lista Telefônica";
@@ -84,29 +85,39 @@
                     <!-- ng-repeat -> Iterando sobre os itens de uma coleção ou de um objeto -->
                     <tr ng-class="{'selecionado negrito':contato.selecionado}" ng-repeat="contato in contatos">
                         <td><input type="checkbox" ng-model="contato.selecionado" style="cursor: pointer;"></td>
-                        <td>{{contato.nome}}</td>
-                        <td>{{contato.telefone}}</td>
-                        <td>{{contato.operadora.nome}}</td>
+                        <td ng-bind="contato.nome"></td>
+                        <td ng-bind="contato.telefone"></td>
+                        <td ng-bind="contato.operadora.nome"></td>
                         <td><div style="width: 20px; height: 20px;" ng-style="{'background-color': contato.cor}"></div></td>
                     </tr>
                 </tbody>
             </table>
             <hr>
-            <form name="contatoForm" action="">
+            <form name="contatoForm">
                 <!-- ng-model -> Vinculando um elemento de formulário a uma propriedade do $scope -->
-                <input class="form-control" type="text" ng-model="contato.nome" name="nome" placeholder="Nome" ng-required="true">
-                <input class="form-control" type="text" ng-model="contato.telefone" name="telefone" placeholder="Telefone" ng-required="true">
+                <input class="form-control" type="text" ng-model="contato.nome" name="nome" placeholder="Nome" ng-required="true" ng-minlength="10">
+                <input class="form-control" type="text" ng-model="contato.telefone" name="telefone" placeholder="Telefone" ng-required="true" ng-pattern="/^\d{5}-\d{4}$/">
                 <!-- ng-options -> Especificando as opções de um elemento select -->
                 <select class="form-control" ng-model="contato.operadora" ng-options="operadora.nome group by operadora.categoria for operadora in operadoras">
                     <option value="">Selecione uma operadora</option>
                 </select>
             </form>
-            <div ng-show="contatoForm.nome.$invalid && contatoForm.nome.$dirty" class="alert alert-danger">
-                Por favor, preencha o campo nome!
-            </div>
-            <div ng-show="contatoForm.nome.$invalid && contatoForm.telefone.$dirty" class="alert alert-danger">
-                Por favor, preencha o campo telefone!
-            </div>
+			<div ng-messages="$contatoForm.nome.$error" class="alert alert-danger">
+				<div ng-message="required">
+					Por favor, preencha o campo nome!
+				</div>
+				<div ng-message="minlength">
+					O campo nome deve ter no mínimo 10 caracteres.
+				</div>
+			</div>
+			<div ng-messages="$contatoForm.telefone.$error" class="alert alert-danger">
+				<div ng-message="required">
+					Por favor, preencha o campo telefone!
+				</div>
+				<div ng-message="pattern">
+				   O campo telefone dever estar no formato DDDDD-DDDD.
+				</div>
+			</div>
             <!-- ng-click -> Associando um evento de clique a um elemento -->
             <!-- ng-disabled -> Desabilitando um elemento -->
             <button class="btn btn-primary btn-block" ng-click="adicionarContato(contato)" ng-disabled="contatoForm.$invalid">Adicionar Contato</button>
