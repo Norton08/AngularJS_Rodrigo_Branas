@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<!-- ng-app -> definindo as fronteiras da aplicação -->
+<html lang="pt-BR" ng-app="listaTelefonica">
+    <head>
+        <title>Lista Telefônica</title>
+        <link rel="stylesheet" type="text/css" href="/node_modules/bootstrap/dist/css/bootstrap.css">
+        <style>
+            .jumbotron {
+                width: 400px;
+                text-align: center;
+                margin-left: auto;
+                margin-right: auto;
+                margin-top: 20px;
+            }
+        </style>
+        <script src="/node_modules/angular/angular.js"></script>
+        <script>
+            angular.module("listaTelefonica", []);
+            angular.module("listaTelefonica").controller("listaTelefonicaCtrl",
+                function ($scope) {
+                    $scope.app = "Lista Telefônica";
+
+                    $scope.contatos = [
+                        { nome: "Pedro", telefone: "99998888" },
+                        { nome: "Ana", telefone: "99998877" },
+                        { nome: "Maria", telefone: "99998866" }
+                    ];
+
+                    $scope.adicionarContato = function (contato) {
+                        $scope.contatos.push(contato);
+                        delete $scope.contato;
+                    };
+                }
+            );
+        </script>
+    </head>
+    <!-- ng-controller -> Vinculando um elemento da View ao Controller -->
+    <body ng-controller="listaTelefonicaCtrl">
+        <!-- ng-bind -> Substituindo o elemento por uma expressão -->
+        <div class="jumbotron">
+            <h3 ng-bind="app"></h3>
+            <table class="table table-striped">
+                <thead>
+                    <th>Nome</th>
+                    <th>Telefone</th>
+                </thead>
+                <!-- ng-repeat -> Iterando sobre os itens de uma coleção ou de um objeto -->
+                 <tbody>
+                    <tr ng-repeat="contato in contatos">
+                        <td>{{contato.nome}}</td>
+                        <td>{{contato.telefone}}</td>
+                    </tr>
+                 </tbody>
+            </table>
+            <hr>
+            <!-- ng-model -> Vinculando um elemento de formulário a uma propriedade do $scope -->
+            <input class="form-control" type="text" ng-model="contato.nome" placeholder="Nome">
+            <input class="form-control" type="text" ng-model="contato.telefone" placeholder="Telefone">
+            <button class="btn btn-primary btn-block" ng-click="adicionarContato(contato)">Adicionar</button>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<!-- ng-app -> definindo as fronteiras da aplicação -->
+<html lang="pt-BR" ng-app="helloWorld">
+<head>
+    <title>Hello World</title>
+    <script src="/lib/angular/angular.js"></script>
+    <script>
+        angular.module("helloWorld", []);
+        angular.module("helloWorld").controller("helloWorldCtrl", function($scope){
+			$scope.message = "Hello World!";
+        });
+    </script>
+</head>
+<body>
+    <!-- ng-controller -> Vinculando um elemento da View ao Controller-->
+    <div ng-controller="helloWorldCtrl">
+		{{message}}
+	</div>
+</body>
+</html>
